@@ -200,7 +200,7 @@ data.forEach((version) => {
         await calculationPage.selectOperation(action.operation);
         await calculationPage.clickCalculateButton();
 
-        await expect(page.locator('#errorMsgField'), 'Validation message was not shown').toHaveText('Number 1 is not a number');
+        await expect(page.locator('#errorMsgField'), `Validation message for the first field was not shown while user operates ${action.operation} action`).toHaveText('Number 1 is not a number');
       });
     });
 
@@ -230,7 +230,7 @@ data.forEach((version) => {
         await calculationPage.selectOperation(action.operation);
         await calculationPage.clickCalculateButton();
 
-        await expect(page.locator('#errorMsgField'), 'Validation message was not shown').toHaveText('Number 2 is not a number');
+        await expect(page.locator('#errorMsgField'), `Validation message for the first field was not shown while user operates ${action.operation} action`).toHaveText('Number 2 is not a number');
       });
     });
 
