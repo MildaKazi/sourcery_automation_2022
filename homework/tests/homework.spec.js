@@ -13,7 +13,7 @@ const operations = {
 };
 
 data.forEach((version) => {
-  test.describe(version + ': Operations', () => {
+  test.describe('Build version: ' + version + ' Operations', () => {
     [
       {
         operation: operations.add,
@@ -38,7 +38,7 @@ data.forEach((version) => {
     ].forEach((action) => {
       test(`${action.name} 3 and 3 should be ${action.answer}`, async ({ page }) => {
         let calculationPage = new CalculationPage(page);
-        await calculationPage.navigate();
+        await calculationPage.navigateToCalculatorPage();
         await calculationPage.selectBuild(version);
         await calculationPage.enterFirstNumber('3');
         await calculationPage.enterSecondNumber('3');
@@ -73,7 +73,7 @@ data.forEach((version) => {
     ].forEach((action) => {
       test(`${action.name} -8 and -13 should be ${action.answer}`, async ({ page }) => {
         let calculationPage = new CalculationPage(page);
-        await calculationPage.navigate();
+        await calculationPage.navigateToCalculatorPage();
         await calculationPage.selectBuild(version);
         await calculationPage.enterFirstNumber('-8');
         await calculationPage.enterSecondNumber('-13');
@@ -108,7 +108,7 @@ data.forEach((version) => {
     ].forEach((action) => {
       test(`${action.name} 2.5 and 10.8 should be ${action.answer}`, async ({ page }) => {
         let calculationPage = new CalculationPage(page);
-        await calculationPage.navigate();
+        await calculationPage.navigateToCalculatorPage();
         await calculationPage.selectBuild(version);
         await calculationPage.enterFirstNumber('2.5');
         await calculationPage.enterSecondNumber('10.8');
@@ -121,24 +121,23 @@ data.forEach((version) => {
 
     test(`Multiplying 2.5 and 10.3 should get answer 25.75 after selecting Integers only checkbox - 25 `, async ({ page }) => {
       let calculationPage = new CalculationPage(page);
-      await calculationPage.navigate();
+      await calculationPage.navigateToCalculatorPage();
       await calculationPage.selectBuild(version);
       await calculationPage.enterFirstNumber('2.5');
       await calculationPage.enterSecondNumber('10.3');
       await calculationPage.selectOperation(operations.multiply);
       await calculationPage.clickCalculateButton();
 
-      let decimalResult = page.locator('#numberAnswerField');
+      await expect(page.locator('#numberAnswerField'), 'Multiplying answer with integers only is not 25.75').toHaveValue('25.75');
 
       await calculationPage.clickIntegersCheckbox();
 
-      await expect(decimalResult, 'Multiplying answer with integers only is not 25').toHaveValue('25.75');
       await expect(page.locator('#numberAnswerField'), 'Multiplying answer with integers only is not 25').toHaveValue('25');
     });
 
     test(`Integers checkbox disappears with Concatenante operations`, async ({ page }) => {
       let calculationPage = new CalculationPage(page);
-      await calculationPage.navigate();
+      await calculationPage.navigateToCalculatorPage();
       await calculationPage.selectBuild(version);
       await calculationPage.enterFirstNumber('2.5');
       await calculationPage.enterSecondNumber('10.3');
@@ -150,7 +149,7 @@ data.forEach((version) => {
 
     test(`User should be able to operate strings with Concatenate operation`, async ({ page }) => {
       let calculationPage = new CalculationPage(page);
-      await calculationPage.navigate();
+      await calculationPage.navigateToCalculatorPage();
       await calculationPage.selectBuild(version);
       await calculationPage.enterFirstNumber('java');
       await calculationPage.enterSecondNumber('script');
@@ -163,10 +162,10 @@ data.forEach((version) => {
 });
 
 data.forEach((version) => {
-  test.describe(version + ': Validations', () => {
+  test.describe('Build version: ' + version + ' Validations', () => {
     test(`Maximum amount of digits to be put in First/Second number fields - 10`, async ({ page }) => {
       let calculationPage = new CalculationPage(page);
-      await calculationPage.navigate();
+      await calculationPage.navigateToCalculatorPage();
       await calculationPage.selectBuild(version);
       await calculationPage.enterFirstNumber('012345678987456');
       await calculationPage.enterSecondNumber('012345678987456');
@@ -195,7 +194,7 @@ data.forEach((version) => {
     ].forEach((action) => {
       test(`Validation message should be shown if user ${action.name} letters in first field.`, async ({ page }) => {
         let calculationPage = new CalculationPage(page);
-        await calculationPage.navigate();
+        await calculationPage.navigateToCalculatorPage();
         await calculationPage.selectBuild(version);
         await calculationPage.enterFirstNumber('some letters');
         await calculationPage.selectOperation(action.operation);
@@ -225,7 +224,7 @@ data.forEach((version) => {
     ].forEach((action) => {
       test(`Validation message should be shown if user ${action.name} letters in second field.`, async ({ page }) => {
         let calculationPage = new CalculationPage(page);
-        await calculationPage.navigate();
+        await calculationPage.navigateToCalculatorPage();
         await calculationPage.selectBuild(version);
         await calculationPage.enterSecondNumber('some letters');
         await calculationPage.selectOperation(action.operation);
@@ -237,7 +236,7 @@ data.forEach((version) => {
 
     test(`Answer field should be read only`, async ({ page }) => {
       let calculationPage = new CalculationPage(page);
-      await calculationPage.navigate();
+      await calculationPage.navigateToCalculatorPage();
       await calculationPage.selectBuild(version);
       await calculationPage.enterAnswerField('1234');
 
@@ -249,11 +248,11 @@ data.forEach((version) => {
 
     test(`Clear button should work on Answer field and Integers only field.`, async ({ page }) => {
       let calculationPage = new CalculationPage(page);
-      await calculationPage.navigate();
+      await calculationPage.navigateToCalculatorPage();
       await calculationPage.selectBuild(version);
       await calculationPage.enterFirstNumber('5');
       await calculationPage.enterSecondNumber('5');
-      await calculationPage.selectOperation();
+      await calculationPage.selectOperation(operations.add);
       await calculationPage.clickCalculateButton();
       await calculationPage.clickIntegersCheckbox();
       await calculationPage.clickClearButton();

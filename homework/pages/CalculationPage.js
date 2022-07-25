@@ -5,7 +5,7 @@ exports.CalculationPage = class CalculationPage {
     this.page = page;
   }
 
-  async navigate() {
+  async navigateToCalculatorPage() {
     await this.page.goto('https://testsheepnz.github.io/BasicCalculator');
   }
 
